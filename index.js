@@ -3,6 +3,8 @@ require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
 const express = require('express');
 const mongoose = require('mongoose');
 const produtoRoutes = require('./routes/produtoRoutes'); // Importa as rotas de produtos
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
 
 // Inicialização do Express
 const app = express();
@@ -26,9 +28,29 @@ app.get('/', (req, res) => {
   res.json({ message: 'Bem-vindo à API de Produtos!' });
 });
 
+// Configurações do Swagger JSDoc
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'API de Produtos',
+      version: '1.0.0',
+      description: 'Uma API simples para gerenciar um CRUD de produtos.',
+    },
+    servers: [
+      {
+        url: 'https://api-produtos-300p.onrender.com', // **IMPORTANTE: Substitua pela sua URL do Render**
+      },
+    ],
+  },
+  apis: ['./routes/*.js'], // Caminho para os arquivos que contêm as anotações
+};
+
+const specs = swaggerJsdoc(options);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
+
 // Conexão com o MongoDB
-// Substitua <username> e <password> pelas suas credenciais do MongoDB Atlas
-const DB_USER = process.env.DB_USER || "seu_usuario_aqui";
+//  <password> pelas suas credenciais do MongoDB Atlas
 const DB_PASSWORD = process.env.DB_PASSWORD || "sua_senha_aqui";
 
 mongoose
