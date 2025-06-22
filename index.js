@@ -59,9 +59,13 @@ mongoose
   )
   .then(() => {
     console.log('Conectado ao MongoDB com sucesso!');
-    // Inicia o servidor na porta 3000 após a conexão bem-sucedida
-    app.listen(3000, () => {
-      console.log('Servidor rodando na porta 3000');
+    
+    // Define a porta do servidor, usando a do Render ou a 3000 como padrão
+    const PORT = process.env.PORT || 3000;
+
+    // Inicia o servidor
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`);
     });
   })
   .catch((err) => {
